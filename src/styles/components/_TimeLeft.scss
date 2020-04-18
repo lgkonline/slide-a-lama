@@ -1,15 +1,19 @@
 .TimeLeft {
+    display: flex;
+    justify-content: center;
+}
+
+.TimeLeft-count {
     padding: 5px;
     background-color: $pillar-yellow;
     width: 8rem;
-    margin: 0 auto;
     border-radius: 6px;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 2px;
     box-shadow: inset 1px -1px darken($pillar-yellow, 10%), inset -1px 1px lighten($pillar-yellow, 30%);
 }
 
-.TimeLeft-count {
+.TimeLeft-count-inner {
     font-family: "Luckiest Guy", cursive;
     background-color: $dark-bg;
     color: $pillar-yellow;
@@ -20,4 +24,46 @@
     text-shadow: -1px -1px lighten($pillar-yellow, 40%);
     border-radius: 3px;
     box-shadow: inset 0 -1rem rgb(29, 28, 28), 1px -1px darken($pillar-yellow, 10%), -1px 1px lighten($pillar-yellow, 30%);
+}
+
+.TimeLeft-arrow {
+    --player-color: green;
+
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+
+    color: var(--player-color);
+    text-shadow: 0 1px black;
+    animation: .5s infinite cubic-bezier(0.68, 0.01, 0.32, 1.28);
+    width: 40px;
+}
+
+.TimeLeft-arrow-red {
+    --player-color: #{$red};
+    animation-name: TimeLeft-arrow-red;
+}
+
+.TimeLeft-arrow-blue {
+    // transform: scaleX(-1);
+    --player-color: #{$blue};
+    animation-name: TimeLeft-arrow-blue;
+}
+
+@keyframes TimeLeft-arrow-red {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(-1rem);
+    }
+}
+
+@keyframes TimeLeft-arrow-blue {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(1rem);
+    }
 }

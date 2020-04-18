@@ -1,6 +1,7 @@
 @import "./variables";
 @import "./utils";
 
+@import "./components/App";
 @import "./components/Grid";
 @import "./components/Item";
 @import "./components/Stats";
@@ -9,6 +10,10 @@
 
 *, ::after, ::before {
     box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
 }
 
 body {

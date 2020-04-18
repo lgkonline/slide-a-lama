@@ -53,7 +53,6 @@ $Grid-item-size: 4rem;
 
     background-color: $pillar-yellow;
     background-image: linear-gradient(#ffe481, transparent);
-    box-shadow: inset 1px -1px darken($pillar-yellow, 10%), inset -1px 1px lighten($pillar-yellow, 30%);
 
     color: #796419;
     text-shadow: -1px -1px lighten(#796419, 50%);
@@ -61,8 +60,10 @@ $Grid-item-size: 4rem;
 
 .Grid-x-0::before {
     left: ($Grid-item-size / 2) * -1;
+    box-shadow: inset 1px -1px darken($pillar-yellow, 10%), inset -1px 1px lighten($pillar-yellow, 30%);
 }
 
 .Grid-x-4::after {
     right: ($Grid-item-size / 2) * -1;
+    box-shadow: inset -1px -1px darken($pillar-yellow, 10%), inset 1px 1px lighten($pillar-yellow, 30%);
 }

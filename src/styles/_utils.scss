@@ -1,2 +1,7 @@
 @import "./bootstrap-utils/position";
 @import "./bootstrap-utils/spacing";
+
+.mirror {
+    display: inline-block;
+    transform: scaleX(-1);
+}

@@ -16,8 +16,3 @@
 .Lamas-player-blue {
     --player-color: #{$blue};
 }
-
-.Lamas-player-red .Lamas-llama {
-    display: inline-block;
-    transform: scaleX(-1);
-}
