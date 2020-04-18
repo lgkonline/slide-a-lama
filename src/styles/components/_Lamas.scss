@@ -1,0 +1,23 @@
+.Lamas {
+    display: flex;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.Lamas-player {
+    --player-color: green;
+    border-bottom: 3px solid var(--player-color);
+}
+
+.Lamas-player-red {
+    --player-color: #{$red};
+}
+
+.Lamas-player-blue {
+    --player-color: #{$blue};
+}
+
+.Lamas-player-red .Lamas-llama {
+    display: inline-block;
+    transform: scaleX(-1);
+}
