@@ -1,4 +1,6 @@
 .Item {
+    width: $Grid-item-size;
+    height: $Grid-item-size;
     display: flex;
     align-items: center;
     justify-content: center;

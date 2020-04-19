@@ -13,6 +13,7 @@
     padding: 5px;
     border-radius: 5px;
     box-shadow: var(--box-shadow);
+    border: 1px solid transparent;
 
     & > div {
         background-color: $dark-bg;
@@ -25,7 +26,7 @@
     &.active {
         background-image: linear-gradient(rgba(120, 170, 170, 0.281), rgb(120, 170, 170));
         animation: Stats-player-active 4s infinite cubic-bezier(0.26,-0.4, 0.9, 1.38);
-        border: 1px solid cyan;
+        border-color: cyan;
     }
 }
 

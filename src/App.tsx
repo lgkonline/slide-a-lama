@@ -3,8 +3,8 @@ import React, { Fragment } from "react";
 import { IItem, IPlayer } from "./shared/types";
 import { pad } from "./shared/helpers";
 import { TimeLeft } from "./components/TimeLeft";
-
-const debug = false;
+import { DEBUG } from "./shared/constants";
+import { GridOverlay } from "./components/GridOverlay";
 
 const data = {
     items: {
@@ -53,7 +53,9 @@ export interface IAppProps { }
 export interface IAppState {
     activeItems: IItem[];
     players: IPlayer[];
+    nextItems: IItem[];
     currentPlayerIndex: 0 | 1;
+    currentItem: IItem;
 }
 
 export class App extends React.Component<IAppProps, IAppState> {
@@ -88,8 +90,13 @@ export class App extends React.Component<IAppProps, IAppState> {
                 color: "blue"
             }
         ] as IPlayer[],
+        nextItems: [
+            data.items.bar,
+            data.items.plum
+        ] as IItem[],
 
-        currentPlayerIndex: 0 as 0 | 1
+        currentPlayerIndex: 0 as 0 | 1,
+        currentItem: Object.assign({ x: 5, y: 3 }, data.items.banana)
     };
 
     constructor(props: IAppProps) {
@@ -109,8 +116,10 @@ export class App extends React.Component<IAppProps, IAppState> {
     }
 
     render() {
+        const { currentItem } = this.state;
+
         return (
-            <div className={`App ${debug ? "debug" : ""}`}>
+            <div className={`App ${DEBUG === true ? "DEBUG" : ""}`}>
 
 
                 <div className="Stats m-1 mb-3">
@@ -152,24 +161,27 @@ export class App extends React.Component<IAppProps, IAppState> {
                     </div>
 
                     <main className="App-main-col">
-                        <div className="Grid mb-3">
-                            {[...Array(5)].map((i: any, x: number) =>
-                                [...Array(5)].map((j: any, y: number) =>
-                                    <div
-                                        key={`${x}-${y}`}
-                                        className={`Grid-item Grid-item-${x}-${y} Grid-x-${x} Grid-y-${y}`} data-y-friendly={y + 1}
-                                        style={debug ? { boxShadow: "inset 0 0 2px" } : {}}
-                                    >
-                                        {debug && <span className="text-muted position-absolute">x{x} y{y}</span>}
-                                    </div>
-                                )
-                            )}
-
+                        <div className="Grid mt-5 mb-3">
                             {this.state.activeItems.map((item: IItem, index: number) =>
                                 <div key={index} className={`Item Grid-item Grid-item-${item.x}-${item.y}`}>
                                     {item.icon}
                                 </div>
                             )}
+
+                            <div
+                                className={`Item Grid-currentItem Grid-item Grid-item-${currentItem.x}-${currentItem.y} Grid-x-${currentItem.x} Grid-y-${currentItem.y}`}
+                            >
+                                {currentItem.icon}
+                            </div>
+
+                            <GridOverlay
+                                onHover={(x: number, y: number) => {
+                                    let currentItem = this.state.currentItem;
+                                    currentItem.x = x;
+                                    currentItem.y = y;
+                                    this.setState({ currentItem });
+                                }}
+                            />
                         </div>
 
                         <div className="TimeLeft mb-3">
@@ -195,7 +207,13 @@ export class App extends React.Component<IAppProps, IAppState> {
                         </div>
                     </main>
 
-                    <div className="App-side-col" />
+                    <div className="App-side-col">
+                        {this.state.nextItems.reverse().map((item: IItem, index: number) =>
+                            <div key={index} className={`Item`}>
+                                {item.icon}
+                            </div>
+                        )}
+                    </div>
                 </div>
 
 

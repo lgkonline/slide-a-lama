@@ -1,25 +1,21 @@
-$Grid-item-size: 4rem;
-
 .Grid {
     position: relative;
     margin: 0 auto;
     height: $Grid-item-size * 5;
     width: $Grid-item-size * 5;
-    padding-left: $Grid-item-size;
-    padding-right: $Grid-item-size;
     box-sizing: initial;
 
     &::after {
         content: "";
         display: block;
-        width: 100%;
         height: 7px;
         background-color: $pillar-yellow;
         box-shadow: inset 0 1px 1px lighten($pillar-yellow, 30%), inset 0 -1px darken($pillar-yellow, 10%);
 
         position: absolute;
         bottom: 0;
-        left: 0;
+        left: $Grid-item-size * -1;
+        right: $Grid-item-size * -1;
     }
 }
 
@@ -29,41 +25,129 @@ $Grid-item-size: 4rem;
     position: absolute;
 }
 
-@for $x from 0 through 4 {
-    @for $y from 0 through 4 {
+@for $x from -1 through 5 {
+    @for $y from -1 through 5 {
         .Grid-item-#{$x}-#{$y} {
-            transform: translate($Grid-item-size * $x, $Grid-item-size * $y);
+            // transform: translate($Grid-item-size * $x, $Grid-item-size * $y);
+            left: $Grid-item-size * $x;
+            top: $Grid-item-size * $y;
         }
     }
 }
 
-.Grid-x-0::before,
-.Grid-x-4::after {
-    content: attr(data-y-friendly);
-    position: absolute;
-    height: $Grid-item-size;
-    width: $Grid-item-size / 2;
-    top: 0;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Luckiest Guy", cursive;
-    font-size: 2rem;
-
-    background-color: $pillar-yellow;
-    background-image: linear-gradient(#ffe481, transparent);
-
-    color: #796419;
-    text-shadow: -1px -1px lighten(#796419, 50%);
+.Grid-coordinate {
+    &.Grid-x-0::before,
+    &.Grid-x-4::after {
+        content: attr(data-y-friendly);
+        position: absolute;
+        height: $Grid-item-size;
+        width: $Grid-item-size / 2;
+        top: 0;
+    
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Luckiest Guy", cursive;
+        font-size: 2rem;
+    
+        background-color: $pillar-yellow;
+        background-image: linear-gradient(#ffe481, $pillar-yellow);
+    
+        color: #796419;
+        text-shadow: -1px -1px lighten(#796419, 50%);
+    }
+    
+    &.Grid-x-0::before {
+        left: ($Grid-item-size / 2) * -1;
+        box-shadow: inset 1px -1px darken($pillar-yellow, 10%), inset -1px 1px lighten($pillar-yellow, 30%);
+    }
+    
+    &.Grid-x-4::after {
+        right: ($Grid-item-size / 2) * -1;
+        box-shadow: inset -1px -1px darken($pillar-yellow, 10%), inset 1px 1px lighten($pillar-yellow, 30%);
+    }
 }
 
-.Grid-x-0::before {
-    left: ($Grid-item-size / 2) * -1;
-    box-shadow: inset 1px -1px darken($pillar-yellow, 10%), inset -1px 1px lighten($pillar-yellow, 30%);
+.DEBUG .Grid-hoverArea {
+    background-image: linear-gradient(rgba(255, 0, 0, 0.151), pink);
+    box-shadow: inset 10px 0 10px rgba(black, .4);
 }
 
-.Grid-x-4::after {
-    right: ($Grid-item-size / 2) * -1;
-    box-shadow: inset -1px -1px darken($pillar-yellow, 10%), inset 1px 1px lighten($pillar-yellow, 30%);
+.Grid-hoverArea {
+    opacity: .8;
+    z-index: 1;
+    box-sizing: initial;
+
+    &.Grid-x-5,
+    &.Grid-x--1 {
+        padding-left: $Grid-item-size * 2.5;
+        padding-right: $Grid-item-size * 2.5;
+        margin-left: ($Grid-item-size * 2.5) * -1;
+    }
+
+
+    // Areas on top
+
+    &.Grid-item-0--1 {
+        padding-left: $Grid-item-size * 3.5;
+        margin-left: ($Grid-item-size * 3.5) * -1;
+
+    }
+
+    &.Grid-item-4--1 {
+        padding-right: $Grid-item-size * 3.5;
+        margin-right: ($Grid-item-size * 3.5) * -1;
+    }
+
+    &.Grid-y--1 {
+        margin-top: $Grid-item-size * -1;
+        padding-top: $Grid-item-size;
+        
+        &:not(.Grid-item-0--1):not(.Grid-item-4--1) {
+            padding-bottom: $Grid-item-size;
+        }
+    }
+}
+
+.Grid-currentItem {
+    animation: 1.5s infinite ease-in-out;
+
+    &.Grid-x--1 {
+        animation-name: Grid-currentItem-left;
+    }
+
+    &.Grid-x-5 {
+        animation-name: Grid-currentItem-right;
+    }
+
+    &.Grid-y--1 {
+        animation-name: Grid-currentItem-top;
+    }
+}
+
+@keyframes Grid-currentItem-left {
+    0%, 100% {
+        transform: translateX($Grid-item-size * -1);
+    }
+    70% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes Grid-currentItem-right {
+    0%, 100% {
+        transform: translateX($Grid-item-size);
+    }
+    70% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes Grid-currentItem-top {
+    0%, 100% {
+        transform: translateY($Grid-item-size * -1);
+    }
+    70% {
+        transform: translateX(0);
+    }
 }

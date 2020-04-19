@@ -16,7 +16,7 @@ export const TimeLeft: React.FC<ITimeLeftProps> = ({ onTimeUp }) => {
             }
         }, 1000);
         return () => clearInterval(timer as NodeJS.Timeout);
-    }, [counter]);
+    }, [counter, onTimeUp]);
 
     return (
         <div className="TimeLeft-count">
