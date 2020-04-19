@@ -208,7 +208,7 @@ export class App extends React.Component<IAppProps, IAppState> {
                     </main>
 
                     <div className="App-side-col">
-                        {this.state.nextItems.reverse().map((item: IItem, index: number) =>
+                        {this.state.nextItems.map((item: IItem, index: number) =>
                             <div key={index} className={`Item`}>
                                 {item.icon}
                             </div>
