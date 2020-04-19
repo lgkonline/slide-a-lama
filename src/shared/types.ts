@@ -4,6 +4,7 @@ export interface IItem {
     points: number;
     x?: number;
     y?: number;
+    new?: boolean;
 }
 
 export interface IPlayer {

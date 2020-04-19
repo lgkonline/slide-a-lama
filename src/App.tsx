@@ -102,17 +102,60 @@ export class App extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
         super(props);
         this.onTimeUp = this.onTimeUp.bind(this);
+        this.makeMove = this.makeMove.bind(this);
     }
 
     componentDidMount() {
         this.start();
     }
 
+    getNextItem(x: number = 5, y: number = 3) {
+        return Object.assign({ x: x, y: y, new: true }, this.state.nextItems[0]);
+    }
+
     start() {
+        this.setState({
+            currentItem: this.getNextItem()
+        });
     }
 
     onTimeUp() {
         this.setState({ currentPlayerIndex: this.state.currentPlayerIndex === 0 ? 1 : 0 });
+        // this.makeMove();
+    }
+
+    makeMove() {
+        let { currentItem, activeItems } = this.state;
+
+        if (currentItem.x === -1) {
+            // Slide from left
+        }
+
+        if (currentItem.x === 5) {
+            // Slide from right
+            activeItems.forEach((item: IItem) => {
+                if (item.y === currentItem.y) {
+                    // Is in this line
+
+                    if (item.x === 4) {
+                        item.x = item.x - 1;
+                    }
+                }
+            });
+
+            const nextItem = this.getNextItem(currentItem.x, currentItem.y);
+
+            currentItem.x = 4;
+            activeItems.push(currentItem);
+            this.setState({
+                currentItem: nextItem,
+                activeItems: activeItems
+            });
+        }
+
+        if (currentItem.y === -1) {
+            // Slide from top
+        }
     }
 
     render() {
@@ -161,9 +204,12 @@ export class App extends React.Component<IAppProps, IAppState> {
                     </div>
 
                     <main className="App-main-col">
-                        <div className="Grid mt-5 mb-3">
+                        <div
+                            className="Grid mt-5 mb-3"
+                            onClick={this.makeMove}
+                        >
                             {this.state.activeItems.map((item: IItem, index: number) =>
-                                <div key={index} className={`Item Grid-item Grid-item-${item.x}-${item.y}`}>
+                                <div key={index} className={`Item Grid-item Grid-item-${item.x}-${item.y} ${item.new === true ? "new" : ""}`}>
                                     {item.icon}
                                 </div>
                             )}
