@@ -29,7 +29,8 @@
     }
 
     &.new {
-        animation: Grid-item-new 1s;
+        animation: Grid-item-new .5s;
+        background-color: $blue;
     }
 }
 
