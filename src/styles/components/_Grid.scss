@@ -29,12 +29,25 @@
     }
 
     &.new {
-        animation: Grid-item-new .5s;
-        background-color: $blue;
+        animation: 1s;
+
+        &.Grid-x-0 {
+            animation-name: Grid-item-new-left;
+        }
+
+        &.Grid-x-4 {
+            animation-name: Grid-item-new-right;
+        }
     }
 }
 
-@keyframes Grid-item-new {
+@keyframes Grid-item-new-left {
+    from {
+        transform: translateX(-$Grid-item-size);
+    }
+}
+
+@keyframes Grid-item-new-right {
     from {
         transform: translateX($Grid-item-size);
     }

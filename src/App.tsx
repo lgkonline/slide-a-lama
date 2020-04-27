@@ -143,105 +143,8 @@ export class App extends React.Component<IAppProps, IAppState> {
         return null;
     }
 
-    makeMove_before() {
-        let { currentItem, activeItems } = this.state;
-
-        if (currentItem.x === -1) {
-            // Slide from left
-        }
-
-        if (currentItem.x === 5) {
-            // Slide from right
-
-            let keepSlideing = true;
-
-            const thisLine = activeItems.filter((item: IItemCoordinated) => item.y === currentItem.y)
-                .sort((a: IItemCoordinated, b: IItemCoordinated) => a.x > b.x ? -1 : 1);
-            console.log(thisLine);
-
-            // thisLine.forEach((item: IItemCoordinated, i: number) => {
-            //     if (keepSlideing) {
-            //         const next = thisLine[i + 1];
-            //         keepSlideing = (next && next.x === item.x - 1);
-
-            //         item.x = item.x - 1;
-            //     }
-            //     activeItems.push(item);
-            // });
-
-            activeItems.forEach((item: IItemCoordinated) => {
-                if (thisLine.includes(item)) {
-                    if (keepSlideing) {
-                        item.x = item.x - 1;
-                    }
-                }
-            });
-
-            // activeItems.forEach((item: IItem) => {
-            //     if (item.y === currentItem.y) {
-            //         // Is in this line
-
-            //         if (keepSlideing && item.x !== undefined) {
-            //             const neighbourItem = this.getItemByCoordinates(item.x - 1, item.y, activeItems);
-            //             if (!neighbourItem) {
-            //                 keepSlideing = false;
-            //             }
-
-            //             item.x = item.x - 1;
-            //         }
-
-            //     }
-            // });
-
-            const nextItem = this.getNextItem(currentItem.x, currentItem.y);
-
-            // currentItem.x = 4;
-            // activeItems.push(currentItem);
-            this.setState({
-                currentItem: nextItem,
-                activeItems
-            });
-        }
-
-        if (currentItem.y === -1) {
-            // Slide from top
-        }
-    }
-
-    // makeMove_after() {
-    //     let { rows, currentItem } = this.state;
-
-    //     console.log("make move");
-
-    //     const direction: "left" | "right" | "top" = (currentItem.x === -1) ? "left" : (currentItem.x === 5) ? "right" : "top";
-
-    //     if (direction === "left" || direction === "right") {
-    //         let thisColumns = rows[currentItem.y].columns;
-
-    //         if (direction === "right") {
-    //             thisColumns.reverse();
-    //         }
-
-    //         let keepSliding = true;
-
-    //         thisColumns.forEach((item: IItem | null, index: number) => {
-    //             const negIndex = thisColumns.length - index - 1;
-    //             const x = direction === "right" ? negIndex : index;
-    //             console.log(item, x);
-
-    //             if (keepSliding) {
-    //                 keepSliding = (rows[currentItem.y].columns[x - 1] !== null);
-    //                 rows[currentItem.y].columns[x] = null;
-    //                 rows[currentItem.y].columns[x - 1] = item;
-    //             }
-    //         });
-    //     }
-
-    //     this.setState({ rows });
-    // }
-
     makeMove() {
-        let { currentItem, activeItems } = this.state;
+        const { currentItem, activeItems } = this.state;
 
         const direction: "left" | "right" | "top" = (currentItem.x === -1) ? "left" : (currentItem.x === 5) ? "right" : "top";
 
@@ -253,45 +156,58 @@ export class App extends React.Component<IAppProps, IAppState> {
             rows[item.y].columns[item.x] = Object.assign({ itemIndex: index }, item);
         });
 
-        console.log(rows);
+        let newItem = JSON.parse(JSON.stringify(currentItem));
 
-        let keepSliding = true;
+        if (direction === "left" || direction === "right") {
+            let keepSliding = true;
 
-        const line = direction === "right" ? rows[currentItem.y].columns.reverse() : rows[currentItem.y].columns;
+            const line = direction === "right" ? rows[currentItem.y].columns.reverse() : rows[currentItem.y].columns;
 
-        line.forEach((column: IColumn | null, index: number) => {
-            if (keepSliding && column) {
-                keepSliding = (rows[currentItem.y].columns[index + 1] !== null);
+            line.forEach((column: IColumn | null, index: number) => {
+                if (keepSliding && column) {
+                    keepSliding = (rows[currentItem.y].columns[index + 1] !== null);
 
-                if (direction === "left") {
-                    activeItems[column.itemIndex].x++;
+                    if (direction === "left") {
+                        activeItems[column.itemIndex].x++;
+                    }
+                    else if (direction === "right") {
+                        activeItems[column.itemIndex].x--;
+                    }
                 }
-                else if (direction === "right") {
-                    activeItems[column.itemIndex].x--;
-                }
+
+                if (!column) keepSliding = false;
+            });
+
+            if (direction === "left") {
+                newItem.x = 0;
             }
-
-            if (!column) keepSliding = false;
-        });
-
-        if (direction === "left") {
-            currentItem.x = 0;
+            if (direction === "right") {
+                newItem.x = 4;
+            }
         }
-        if (direction === "right") {
-            currentItem.x = 4;
+
+        if (direction === "top") {
+
+            console.log(rows);
+
+            newItem.y = 0;
+
+            rows.forEach((row: IRow, y: number) => {
+                const column = row.columns[currentItem.x];
+                if (column === null) {
+                    newItem.y = y;
+                }
+            });
         }
-        activeItems.push(currentItem);
+
+        activeItems.push(newItem);
 
         const nextItem = this.getNextItem(currentItem.x, currentItem.y);
 
         this.setState({
-            currentItem: null,
+            currentItem: nextItem,
             activeItems
-        }, () => setTimeout(() => {
-            this.setState({
-                currentItem: nextItem
-            });
-        }, 500));
+        });
     }
 
     render() {
@@ -345,7 +261,7 @@ export class App extends React.Component<IAppProps, IAppState> {
                             onClick={this.makeMove}
                         >
                             {this.state.activeItems.map((item: IItem, index: number) =>
-                                <div key={index} className={`Item Grid-item Grid-item-${item.x}-${item.y} ${item.new === true ? "new" : ""}`}>
+                                <div key={index} className={`Item Grid-item Grid-item-${item.x}-${item.y} Grid-x-${item.x} Grid-y-${item.y} ${item.new === true ? "new" : ""}`}>
                                     {item.icon}
                                 </div>
                             )}
